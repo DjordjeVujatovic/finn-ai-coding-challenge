@@ -1,10 +1,8 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import routes from "./routes";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import e from "express";
 
 const app = express();
 app.set("view engine", "pug");
