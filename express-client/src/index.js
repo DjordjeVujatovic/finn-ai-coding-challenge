@@ -29,7 +29,6 @@ app.get("/", async (req, res) => {
       });
   }
   const user = await createUser();
-  console.log(user, "USERRRRRR");
   if (user.data === "Error") {
     createUser();
   } else {
