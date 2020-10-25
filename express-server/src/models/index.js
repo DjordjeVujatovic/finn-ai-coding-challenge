@@ -1,6 +1,6 @@
-import "dotenv/config";
-import { Sequelize, DataTypes } from "sequelize";
-import user from "./user";
+import 'dotenv/config';
+import { Sequelize, DataTypes } from 'sequelize';
+import user from './user';
 
 // Initialize connection to postgres DB
 const sequelize = new Sequelize(
@@ -8,8 +8,8 @@ const sequelize = new Sequelize(
   process.env.DATABASE_USER,
   null,
   {
-    dialect: "postgres",
-  }
+    dialect: 'postgres',
+  },
 );
 
 // DB models
@@ -20,9 +20,9 @@ const models = {
 // Check for connection to DB
 try {
   sequelize.authenticate();
-  console.log("Connection has been established successfully.");
+  console.log('Connection has been established successfully.');
 } catch (error) {
-  console.error("Unable to connect to the database:", error);
+  console.error('Unable to connect to the database:', error);
 }
 
 export { sequelize };
