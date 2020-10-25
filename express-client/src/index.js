@@ -2,7 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
+import _ from "lodash";
 
 const app = express();
 app.set("view engine", "pug");
@@ -13,29 +13,34 @@ app.listen(4000, () =>
   console.log(`Example app listening on port ${process.env.PORT}!!`)
 );
 
-app.get("/", async (req, res) => {
-  const randomUsername = uuidv4();
-
-  function createUser() {
-    return axios
-      .post("http://localhost:3000/users/", {
-        username: randomUsername,
-      })
-      .then(function (response) {
-        return response;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-  const user = await createUser();
-  if (user.data === "Error") {
-    createUser();
-  } else {
-    res.render("index", {
-      message: user.data.Message,
-      username: user.data.User.username,
-      failCount: user.data.FailCount,
+async function createUser() {
+  const username = await axios
+    .get("http://localhost:3000/id/")
+    .then(function (response) {
+      return response.data;
     });
-  }
+
+  return axios
+    .post("http://localhost:3000/users/", {
+      username: await username,
+    })
+    .then(function (response) {
+      if (response.data.status === "fail") {
+        return createUser();
+      }
+      return response;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+app.get("/", async (req, res) => {
+  let user = await createUser();
+
+  res.render("index", {
+    message: user && user.data.message,
+    username: user && user.data.User.username,
+    failCount: user && user.data.failCount,
+  });
 });
