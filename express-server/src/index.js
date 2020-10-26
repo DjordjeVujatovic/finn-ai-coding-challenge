@@ -1,4 +1,6 @@
 import 'dotenv/config';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import cors from 'cors';
 import express from 'express';
 import routes from './routes';
@@ -21,7 +23,11 @@ app.use(cors());
 app.use('/', routes.user);
 
 sequelize.sync().then(async () => {
-  app.listen(process.env.PORT, () =>
+  app.listen(
+    process.env.PORT,
+
     console.log(`Example app listening on port ${process.env.PORT}!`),
   );
 });
+
+module.exports = app;
