@@ -25,6 +25,8 @@ async function createUser() {
       username: await username,
     })
     .then(function (response) {
+      // If the POST requst response returns a failed status,
+      //recursively call self until user is succesfully saved
       if (response.data.status === 'fail') {
         return createUser();
       }
