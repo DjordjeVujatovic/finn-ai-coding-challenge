@@ -26,7 +26,7 @@ async function createUser() {
     })
     .then(function (response) {
       // If the POST requst response returns a failed status,
-      //recursively call self until user is succesfully saved
+      // recursively call self until user is succesfully saved
       if (response.data.status === 'fail') {
         return createUser();
       }
