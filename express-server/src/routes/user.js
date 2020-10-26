@@ -4,14 +4,6 @@ import _ from 'lodash';
 
 const router = Router();
 
-const coin = ['heads', 'tails'];
-
-function coinflip(arr) {
-  return _.sample(arr);
-}
-
-let mockDb = [];
-
 // Get Users
 router.get('/users', async (req, res) => {
   const users = await req.context.models.User.findAll();
@@ -24,14 +16,18 @@ router.get('/id', async (req, res) => {
   return res.send(id);
 });
 
-// Get User
-router.get('/users/:userId', async (req, res) => {
-  const user = await req.context.models.User.findByPk(req.params.userId);
-  return res.send(user);
-});
-
 // Amount of times attempt to save user to DB failed
 let failedUserCreationAttempts = 0;
+
+// Mock DB where user gets saves 50% of the time
+export let mockDb = [];
+
+// Mocking 50% chance with coin and 'coinflip' helper function
+export const coin = ['heads', 'tails'];
+
+export function coinflip(arr) {
+  return _.sample(arr);
+}
 
 // Create User
 router.post('/users/', async (req, res) => {
@@ -56,7 +52,6 @@ router.post('/users/', async (req, res) => {
     return res.send(user);
   } else {
     mockDb.push({ username: req.body.username });
-    console.log(mockDb, 'mockDB');
 
     failedUserCreationAttempts++;
 
